@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'dist',
+    outDir: '../dist',
     emptyOutDir: true,
     minify: 'esbuild',
     chunkSizeWarningLimit: 1000
