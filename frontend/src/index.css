@@ -1,0 +1,508 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background: #000000;
+  background-image: 
+    linear-gradient(45deg, #0a0a0a 25%, transparent 25%),
+    linear-gradient(-45deg, #0a0a0a 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #0a0a0a 75%),
+    linear-gradient(-45deg, transparent 75%, #0a0a0a 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated gradient background overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 20% 50%, rgba(253, 185, 39, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 40% 20%, rgba(255, 140, 66, 0.05) 0%, transparent 50%);
+  animation: gradientShift 20s ease infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(30px, -30px) rotate(120deg);
+  }
+  66% {
+    transform: translate(-30px, 30px) rotate(240deg);
+  }
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Card flip animation */
+.card-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  perspective: 1000px;
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+              0 0 40px rgba(255, 255, 255, 0.1) inset;
+}
+
+.card-front {
+  transform: rotateY(0deg);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, rgba(253, 185, 39, 0.15) 0%, rgba(255, 107, 53, 0.15) 100%);
+}
+
+.card-container.flipped .card-front {
+  transform: rotateY(-180deg);
+}
+
+.card-container.flipped .card-back {
+  transform: rotateY(0deg);
+  box-shadow: 0 25px 70px rgba(253, 185, 39, 0.3),
+              0 0 50px rgba(255, 107, 53, 0.2) inset;
+}
+
+/* Lakers gold text */
+.lakers-gold-text {
+  color: #FDB927;
+  text-shadow: 0 0 10px rgba(253, 185, 39, 0.5);
+}
+
+/* Category selection animation */
+.category-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.category-button.category-selected {
+  animation: categoryPulse 0.3s ease-out;
+}
+
+@keyframes categoryPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Ripple effect from click position */
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(253, 185, 39, 0.4) 50%, transparent 100%);
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  pointer-events: none;
+  animation: rippleExpand 0.6s ease-out;
+  box-shadow: 0 0 20px rgba(253, 185, 39, 0.5);
+}
+
+@keyframes rippleExpand {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(25);
+    opacity: 0;
+  }
+}
+
+/* Glass morphism enhancement */
+.glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+              0 0 40px rgba(253, 185, 39, 0.1) inset;
+}
+
+
+/* Glow text effect */
+.glow-text {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+               0 0 20px rgba(255, 255, 255, 0.3),
+               0 0 30px rgba(253, 185, 39, 0.2);
+}
+
+/* Button glow effect */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-glow:hover::before {
+  left: 100%;
+}
+
+/* Space animation container */
+.space-container {
+  position: relative;
+  min-height: 200px;
+}
+
+
+/* Sparkling stars */
+.sparkle-star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: radial-gradient(circle, #FDB927 0%, #FF6B35 50%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sparkle 2s ease-in-out infinite;
+  box-shadow: 0 0 6px #FDB927, 0 0 12px #FF6B35;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Moons */
+.moon {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 200, 100, 0.5), rgba(255, 140, 66, 0.3));
+  box-shadow: 
+    0 0 20px rgba(253, 185, 39, 0.4),
+    0 0 40px rgba(255, 107, 53, 0.2),
+    inset -10px -10px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.moon-1 {
+  width: 40px;
+  height: 40px;
+  top: 10%;
+  left: 15%;
+  animation: moonOrbit1 15s linear infinite, moonSpin 8s linear infinite;
+}
+
+.moon-2 {
+  width: 30px;
+  height: 30px;
+  top: 60%;
+  right: 20%;
+  animation: moonOrbit2 20s linear infinite, moonSpin 10s linear infinite reverse;
+}
+
+.moon-3 {
+  width: 25px;
+  height: 25px;
+  bottom: 15%;
+  left: 70%;
+  animation: moonOrbit3 18s linear infinite, moonSpin 6s linear infinite;
+}
+
+@keyframes moonOrbit1 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(150px, 100px) rotate(90deg);
+  }
+  50% {
+    transform: translate(200px, 150px) rotate(180deg);
+  }
+  75% {
+    transform: translate(50px, 200px) rotate(270deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+@keyframes moonOrbit2 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-120px, -80px) rotate(-90deg);
+  }
+  50% {
+    transform: translate(-180px, -120px) rotate(-180deg);
+  }
+  75% {
+    transform: translate(-60px, -150px) rotate(-270deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(-360deg);
+  }
+}
+
+@keyframes moonOrbit3 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(100px, -70px) rotate(90deg);
+  }
+  50% {
+    transform: translate(150px, -100px) rotate(180deg);
+  }
+  75% {
+    transform: translate(50px, -150px) rotate(270deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+@keyframes moonSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Planets */
+.planet {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 180, 80, 0.6), rgba(255, 107, 53, 0.4));
+  box-shadow: 
+    0 0 30px rgba(253, 185, 39, 0.5),
+    0 0 60px rgba(255, 107, 53, 0.3),
+    inset -15px -15px 0 rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.planet-1 {
+  width: 60px;
+  height: 60px;
+  top: 20%;
+  right: 10%;
+  animation: planetOrbit1 25s linear infinite, planetSpin 12s linear infinite;
+}
+
+.planet-2 {
+  width: 50px;
+  height: 50px;
+  bottom: 20%;
+  left: 10%;
+  animation: planetOrbit2 30s linear infinite, planetSpin 15s linear infinite reverse;
+}
+
+.planet-3 {
+  width: 45px;
+  height: 45px;
+  top: 50%;
+  left: 50%;
+  animation: planetOrbit3 22s linear infinite, planetSpin 10s linear infinite;
+}
+
+@keyframes planetOrbit1 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-180px, 150px) rotate(90deg);
+  }
+  50% {
+    transform: translate(-250px, 200px) rotate(180deg);
+  }
+  75% {
+    transform: translate(-100px, 250px) rotate(270deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+@keyframes planetOrbit2 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(160px, -130px) rotate(-90deg);
+  }
+  50% {
+    transform: translate(220px, -180px) rotate(-180deg);
+  }
+  75% {
+    transform: translate(80px, -220px) rotate(-270deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(-360deg);
+  }
+}
+
+@keyframes planetOrbit3 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(130px, 120px) rotate(90deg);
+  }
+  50% {
+    transform: translate(180px, 160px) rotate(180deg);
+  }
+  75% {
+    transform: translate(70px, 200px) rotate(270deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+@keyframes planetSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Star Wars light speed effect */
+.lightspeed-button {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.lightspeed-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 1;
+  transform: perspective(800px) rotateX(60deg);
+  transform-origin: center center;
+}
+
+.lightspeed-lines::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  margin-top: -100%;
+  margin-left: -100%;
+  background: 
+    repeating-conic-gradient(
+      from 0deg at center,
+      transparent 0deg,
+      transparent 1.5deg,
+      rgba(253, 185, 39, 0.6) 1.5deg,
+      rgba(253, 185, 39, 0.6) 1.8deg,
+      rgba(255, 107, 53, 0.7) 1.8deg,
+      rgba(255, 107, 53, 0.7) 2deg,
+      transparent 2deg,
+      transparent 3.5deg
+    );
+  animation: lightspeedBreak 3s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.lightspeed-lines::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  margin-top: -100%;
+  margin-left: -100%;
+  background: 
+    repeating-conic-gradient(
+      from 0.75deg at center,
+      transparent 0deg,
+      transparent 1.2deg,
+      rgba(255, 140, 66, 0.5) 1.2deg,
+      rgba(255, 140, 66, 0.5) 1.5deg,
+      rgba(253, 185, 39, 0.6) 1.5deg,
+      rgba(253, 185, 39, 0.6) 1.7deg,
+      transparent 1.7deg,
+      transparent 3deg
+    );
+  animation: lightspeedBreak 3.5s ease-in-out infinite;
+  animation-delay: 0.5s;
+  transform-origin: center center;
+}
+
+@keyframes lightspeedBreak {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.9;
+  }
+  25% {
+    transform: scale(1.2) rotate(2deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(0.8) rotate(-2deg);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(1.1) rotate(1deg);
+    opacity: 0.75;
+  }
+}
+
