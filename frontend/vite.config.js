@@ -5,7 +5,9 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'dist',
-    emptyOutDir: true
+    emptyOutDir: true,
+    minify: 'esbuild',
+    chunkSizeWarningLimit: 1000
   },
   server: {
     port: 3000,
