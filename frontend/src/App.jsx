@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import { GameProvider } from './context/GameContext'
 import Home from './pages/Home'
 import StartGame from './pages/StartGame'
@@ -18,6 +19,7 @@ function App() {
           <Route path="/create-category" element={<CreateCategory />} />
         </Routes>
       </Router>
+      <Analytics />
     </GameProvider>
   )
 }
