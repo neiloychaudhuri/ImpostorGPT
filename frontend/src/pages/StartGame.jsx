@@ -72,6 +72,18 @@ export default function StartGame() {
     setPlayerNames(newNames)
   }
 
+  const handleDecreasePlayers = () => {
+    if (numPlayers > 3) {
+      setNumPlayers(numPlayers - 1)
+    }
+  }
+
+  const handleIncreasePlayers = () => {
+    if (numPlayers < 10) {
+      setNumPlayers(numPlayers + 1)
+    }
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-black relative z-10">
       <div className="glass-card rounded-3xl shadow-2xl p-8 md:p-12 max-w-md w-full">
@@ -83,24 +95,27 @@ export default function StartGame() {
             <label className="block text-white text-xl font-semibold mb-3">
               Number of Players
             </label>
-            <input
-              type="number"
-              min="3"
-              max="10"
-              value={numPlayers}
-              onChange={(e) => {
-                const value = e.target.value
-                if (value === '') {
-                  // Don't update if empty, keep current value
-                  return
-                }
-                const numValue = parseInt(value)
-                if (!isNaN(numValue) && numValue >= 3 && numValue <= 10) {
-                  setNumPlayers(numValue)
-                }
-              }}
-              className="w-full glass-card text-white text-2xl font-semibold py-4 px-6 rounded-2xl border-2 border-white/20 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-[#FDB927]/30 transition-all"
-            />
+            <div className="flex items-center justify-center gap-4">
+              <button
+                type="button"
+                onClick={handleDecreasePlayers}
+                disabled={numPlayers <= 3}
+                className="glass-card text-white text-3xl font-bold w-16 h-16 rounded-2xl border-2 border-white/20 hover:border-white/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 flex items-center justify-center"
+              >
+                −
+              </button>
+              <div className="glass-card text-white text-4xl font-bold py-4 px-8 rounded-2xl border-2 border-white/20 min-w-[120px] text-center">
+                {numPlayers}
+              </div>
+              <button
+                type="button"
+                onClick={handleIncreasePlayers}
+                disabled={numPlayers >= 10}
+                className="glass-card text-white text-3xl font-bold w-16 h-16 rounded-2xl border-2 border-white/20 hover:border-white/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 flex items-center justify-center"
+              >
+                +
+              </button>
+            </div>
           </div>
 
           <div className="space-y-3">
