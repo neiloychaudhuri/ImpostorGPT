@@ -117,7 +117,7 @@ export const builtInCategories = [
       { word: 'Zoom', hint: 'Close' },
       { word: 'Slack', hint: 'Relaxed' },
       { word: 'Dropbox', hint: 'Storage' },
-      { word: 'PayPal', hint: 'Money' },
+      { word: 'PayPal', hint: 'Cashless' },
       { word: 'Square', hint: 'Shape' },
       { word: 'Stripe', hint: 'Line' },
       { word: 'Shopify', hint: 'Store' },
