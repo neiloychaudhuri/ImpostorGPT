@@ -88,7 +88,17 @@ export default function StartGame() {
               min="3"
               max="10"
               value={numPlayers}
-              onChange={(e) => setNumPlayers(parseInt(e.target.value))}
+              onChange={(e) => {
+                const value = e.target.value
+                if (value === '') {
+                  // Don't update if empty, keep current value
+                  return
+                }
+                const numValue = parseInt(value)
+                if (!isNaN(numValue) && numValue >= 3 && numValue <= 10) {
+                  setNumPlayers(numValue)
+                }
+              }}
               className="w-full glass-card text-white text-2xl font-semibold py-4 px-6 rounded-2xl border-2 border-white/20 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-[#FDB927]/30 transition-all"
             />
           </div>

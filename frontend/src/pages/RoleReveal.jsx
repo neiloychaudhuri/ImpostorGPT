@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGame } from '../context/GameContext'
 
@@ -17,23 +17,37 @@ export default function RoleReveal() {
 
   const [roleRevealed, setRoleRevealed] = useState(false)
   const [isFlipping, setIsFlipping] = useState(false)
+  const touchStartRef = useRef(false)
 
   // Reset reveal state when player changes
   useEffect(() => {
     setRoleRevealed(false)
     setIsFlipping(false)
+    touchStartRef.current = false
   }, [currentPlayerIndex])
 
   const isImpostor = currentPlayerIndex === impostorIndex
   const currentPlayer = players[currentPlayerIndex]
   const isLastPlayer = currentPlayerIndex === players.length - 1
 
-  const handleRevealStart = () => {
-    setIsFlipping(true)
-    setRoleRevealed(true)
+  const handleRevealStart = (e) => {
+    // Prevent default to avoid text selection and other touch behaviors
+    if (e.type === 'touchstart') {
+      e.preventDefault()
+    }
+    if (!touchStartRef.current) {
+      touchStartRef.current = true
+      setIsFlipping(true)
+      setRoleRevealed(true)
+    }
   }
 
-  const handleRevealEnd = () => {
+  const handleRevealEnd = (e) => {
+    // Prevent default
+    if (e.type === 'touchend' || e.type === 'touchcancel') {
+      e.preventDefault()
+    }
+    touchStartRef.current = false
     setIsFlipping(false)
     setRoleRevealed(false)
   }
@@ -66,6 +80,8 @@ export default function RoleReveal() {
               onMouseLeave={handleRevealEnd}
               onTouchStart={handleRevealStart}
               onTouchEnd={handleRevealEnd}
+              onTouchCancel={handleRevealEnd}
+              style={{ touchAction: 'none' }}
             >
               <div className="text-center">
                 <p className="text-2xl text-white/80 mb-4">
