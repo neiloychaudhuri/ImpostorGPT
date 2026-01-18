@@ -66,7 +66,35 @@ export default function CreateCategory() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-black relative z-10">
-      <div className="glass-card rounded-3xl shadow-2xl p-8 md:p-12 max-w-md w-full">
+      <div className="glass-card rounded-3xl shadow-2xl p-8 md:p-12 max-w-md w-full relative">
+        {loading && (
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-3xl flex items-center justify-center z-20">
+            <div className="text-center">
+              <svg
+                className="animate-spin h-12 w-12 text-[#FDB927] mx-auto mb-4"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <p className="text-white text-xl font-semibold glow-text">Generating category...</p>
+              <p className="text-white/70 text-sm mt-2">This may take a few seconds</p>
+            </div>
+          </div>
+        )}
         <h2 className="text-4xl font-bold text-white mb-8 text-center glow-text">
           Create Category
         </h2>
@@ -94,8 +122,30 @@ export default function CreateCategory() {
           <button
             type="submit"
             disabled={loading || !categoryName.trim()}
-            className="btn-glow w-full bg-gradient-to-r from-[#FDB927]/30 to-[#FF6B35]/30 hover:from-[#FDB927]/40 hover:to-[#FF6B35]/40 backdrop-blur-xl border-2 border-[#FDB927]/40 disabled:opacity-50 disabled:cursor-not-allowed text-white text-2xl font-semibold py-6 px-8 rounded-2xl transition-all shadow-lg hover:shadow-2xl hover:shadow-[#FDB927]/30 hover:scale-[1.02] relative overflow-hidden"
+            className="btn-glow w-full bg-gradient-to-r from-[#FDB927]/30 to-[#FF6B35]/30 hover:from-[#FDB927]/40 hover:to-[#FF6B35]/40 backdrop-blur-xl border-2 border-[#FDB927]/40 disabled:opacity-50 disabled:cursor-not-allowed text-white text-2xl font-semibold py-6 px-8 rounded-2xl transition-all shadow-lg hover:shadow-2xl hover:shadow-[#FDB927]/30 hover:scale-[1.02] relative overflow-hidden flex items-center justify-center gap-3"
           >
+            {loading && (
+              <svg
+                className="animate-spin h-6 w-6 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            )}
             {loading ? 'Generating...' : 'Create Category'}
           </button>
         </form>
