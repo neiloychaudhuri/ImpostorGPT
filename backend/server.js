@@ -38,10 +38,12 @@ app.post('/generate-category', async (req, res) => {
       console.log('Could not list models:', listError.message)
     }
     
-    // Prioritize cheapest, high-volume models for free tier
-    // gemini-2.5-flash is the best: cheapest, fastest, highest token limits
+    // Prioritize models with grounding/web search support for better quality
+    // Then fallback to cheaper models
     const preferredModels = [
-      'gemini-2.5-flash',        // Best: newest, cheapest, high tokens
+      'gemini-2.0-flash-exp',    // Best: supports grounding/web search
+      'gemini-1.5-pro',          // Supports grounding/web search
+      'gemini-2.5-flash',        // Fallback: newest, cheapest, high tokens
       'gemini-flash-latest',     // Fallback: always latest flash
       'gemini-2.0-flash',        // Alternative flash model
       'gemini-2.0-flash-lite'    // Even cheaper lite version
@@ -85,10 +87,29 @@ app.post('/generate-category', async (req, res) => {
     }
     
     if (!modelName) {
-      // Fallback: try using the SDK with gemini-pro
+      // Fallback: try using the SDK with grounding support
       const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-      const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
-      const prompt = `Generate 30-40 well-known items for the category "${category}". For each item, provide a subtle hint (1-3 words) that gently nudges at the word but never gives it away directly. The hints should be vague and require some thought. Return ONLY a valid JSON array in this exact format: [{"word": "Item Name", "hint": "subtle hint"}, ...]. Do not include any other text, explanations, or markdown formatting.`
+      let model
+      try {
+        model = genAI.getGenerativeModel({ 
+          model: 'gemini-2.0-flash-exp',
+          tools: [{
+            googleSearchRetrieval: {}
+          }]
+        })
+      } catch (error) {
+        try {
+          model = genAI.getGenerativeModel({ 
+            model: 'gemini-1.5-pro',
+            tools: [{
+              googleSearchRetrieval: {}
+            }]
+          })
+        } catch (error2) {
+          model = genAI.getGenerativeModel({ model: 'gemini-pro' })
+        }
+      }
+      const prompt = `Generate 30-40 well-known items for the category "${category}". Use web search to find current, accurate, and well-known items. For each item, provide a subtle hint (1-3 words) that gently nudges at the word but never gives it away directly. The hints should be vague and require some thought. Return ONLY a valid JSON array in this exact format: [{"word": "Item Name", "hint": "subtle hint"}, ...]. Do not include any other text, explanations, or markdown formatting.`
       const result = await model.generateContent(prompt)
       const response = await result.response
       const text = response.text()
@@ -136,18 +157,29 @@ app.post('/generate-category', async (req, res) => {
     }
 
     // Use REST API directly with the working model
-    const prompt = `Generate 30-40 well-known items for the category "${category}". For each item, provide a subtle hint (1-3 words) that gently nudges at the word but never gives it away directly. The hints should be vague and require some thought. Return ONLY a valid JSON array in this exact format: [{"word": "Item Name", "hint": "subtle hint"}, ...]. Do not include any other text, explanations, or markdown formatting.`
+    const prompt = `Generate 30-40 well-known items for the category "${category}". Use web search to find current, accurate, and well-known items that are popular and recognizable. For each item, provide a subtle hint (1-3 words) that gently nudges at the word but never gives it away directly. The hints should be vague and require some thought. Return ONLY a valid JSON array in this exact format: [{"word": "Item Name", "hint": "subtle hint"}, ...]. Do not include any other text, explanations, or markdown formatting.`
+
+    // Check if model supports grounding (web search)
+    const supportsGrounding = modelName.includes('exp') || modelName.includes('1.5-pro')
+    const requestBody = {
+      contents: [{
+        parts: [{ text: prompt }]
+      }]
+    }
+    
+    // Add grounding tools if model supports it
+    if (supportsGrounding) {
+      requestBody.tools = [{
+        googleSearchRetrieval: {}
+      }]
+    }
 
     const apiResponse = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{ text: prompt }]
-          }]
-        })
+        body: JSON.stringify(requestBody)
       }
     )
 
