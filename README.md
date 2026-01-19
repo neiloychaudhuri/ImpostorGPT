@@ -27,8 +27,8 @@ A pass-the-phone party game where players take turns revealing their roles. One 
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd one-word-impostor
+git clone https://github.com/neiloychaudhuri/ImpostorGPT.git
+cd ImpostorGPT
 ```
 
 2. Install dependencies:
@@ -87,14 +87,18 @@ vercel
    - `GEMINI_API_KEY`: Your Google Gemini API key
 
 The `vercel.json` configuration handles:
-- Frontend static build
-- Backend serverless function at `/generate-category`
+- Frontend static build (outputs to `dist/`)
+- Backend serverless function at `/api/generate-category`
 - SPA routing for React Router
+
+**Note**: The build command uses npm workspaces to build the frontend workspace.
 
 ## Project Structure
 
 ```
-one-word-impostor/
+ImpostorGPT/
+├── api/
+│   └── generate-category.js  # Vercel serverless function
 ├── frontend/
 │   ├── src/
 │   │   ├── components/     # Reusable components
@@ -104,10 +108,12 @@ one-word-impostor/
 │   │   ├── utils/          # Utilities (sessionStorage)
 │   │   ├── App.jsx
 │   │   └── main.jsx
+│   ├── public/
+│   │   └── magnifying-glass.svg  # Favicon
+│   ├── index.html
 │   ├── package.json
 │   └── vite.config.js
 ├── backend/
-│   ├── api/                # Vercel serverless functions
 │   ├── server.js           # Express server (dev)
 │   └── package.json
 ├── package.json            # Root workspace config
@@ -123,13 +129,43 @@ one-word-impostor/
 
 ## Built-in Categories
 
-- **Basketball Players**: 40 NBA players with subtle hints
-- **UW Buildings**: 40 University of Washington buildings
-- **Tech Companies**: 40 technology companies
+ImpostorGPT includes 24 built-in categories with subtle hints:
+
+- **Basketball Players** - NBA stars and legends
+- **UWaterloo Buildings** - University of Waterloo campus buildings
+- **Tech Companies** - Major technology companies
+- **Movie Characters** - Iconic film characters
+- **Superheroes** - Marvel and DC heroes
+- **Famous Musicians** - Legendary artists and bands
+- **Video Game Characters** - Beloved gaming icons
+- **Famous Landmarks** - World-renowned structures
+- **Food & Drinks** - International cuisine and beverages
+- **Animals** - Wildlife from around the world
+- **Countries** - Nations and their characteristics
+- **TV Shows** - Popular television series
+- **Sports** - Various athletic activities
+- **Famous Authors** - Literary greats
+- **Cartoon Characters** - Animated favorites
+- **Famous Scientists** - Pioneers of science
+- **Fashion Brands** - Iconic clothing labels
+- **Cars** - Automotive manufacturers
+- **Social Media Platforms** - Digital networks
+- **Disney Characters** - Disney favorites
+- **Marvel Characters** - Marvel universe heroes and villains
+- **Pokemon** - Pocket monsters
+- **Famous Paintings** - Masterpieces of art
+- **Famous Historical Figures** - Influential people from history
 
 ## Custom Categories
 
-Users can create custom categories by providing a category name. The backend uses Google Gemini AI to generate 30-40 items with subtle hints. Custom categories are stored in sessionStorage and persist for the session.
+Users can create custom categories by providing a category name. The backend uses Google Gemini AI (gemini-2.5-flash model) to generate 30-40 items with subtle hints. Custom categories are used immediately and don't need to be saved - they're passed directly to the game.
+
+## Features Details
+
+- **Mobile-Optimized**: Touch-friendly interface with text selection disabled for better mobile experience
+- **Loading States**: Visual feedback during category generation
+- **Player Management**: Plus/minus buttons for adjusting player count (3-10 players)
+- **Custom Branding**: Magnifying glass favicon and "ImpostorGPT" browser title
 
 ## License
 
