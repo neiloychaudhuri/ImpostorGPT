@@ -1,4 +1,4 @@
-# One Word Impostor
+# ImpostorGPT
 
 A pass-the-phone party game where players take turns revealing their roles. One player is the impostor who doesn't know the word, while others try to figure out who it is.
 
