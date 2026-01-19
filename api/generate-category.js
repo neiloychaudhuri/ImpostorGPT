@@ -18,34 +18,30 @@ export default async function handler(req, res) {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-    // Use a model that supports grounding/web search for better quality
-    // Try gemini-2.0-flash-exp first, fallback to gemini-1.5-pro or gemini-2.5-flash
-    let model
-    try {
-      model = genAI.getGenerativeModel({ 
-        model: 'gemini-2.0-flash-exp',
-        tools: [{
-          googleSearchRetrieval: {}  // Enable web search
-        }]
-      })
-    } catch (error) {
-      // Fallback to models without grounding if exp model not available
+    
+    // Use gemini-2.5-flash as primary (most reliable and available)
+    // Fallback to other models if needed
+    const prompt = `Generate 30-40 extremely well-known items for the category "${category}". For each item, provide a subtle hint (1-3 words) that gently nudges at the word but never gives it away directly. The hints should be vague and require some thought. Return ONLY a valid JSON array in this exact format: [{"word": "Item Name", "hint": "subtle hint"}, ...]. Do not include any other text, explanations, or markdown formatting.`
+
+    // Try models in order of preference
+    const modelsToTry = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro']
+    let result = null
+    let lastError = null
+    
+    for (const modelName of modelsToTry) {
       try {
-        model = genAI.getGenerativeModel({ 
-          model: 'gemini-1.5-pro',
-          tools: [{
-            googleSearchRetrieval: {}
-          }]
-        })
-      } catch (error2) {
-        // Final fallback to regular model
-        model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+        const model = genAI.getGenerativeModel({ model: modelName })
+        result = await model.generateContent(prompt)
+        break
+      } catch (error) {
+        lastError = error
+        continue
       }
     }
-
-    const prompt = `Generate 30-40 extremely well-known items for the category "${category}". Use web search to find current, accurate, and well-known items that are popular and recognizable. For each item, provide a subtle hint (1-3 words) that gently nudges at the word but never gives it away directly. The hints should be vague and require some thought. Return ONLY a valid JSON array in this exact format: [{"word": "Item Name", "hint": "subtle hint"}, ...]. Do not include any other text, explanations, or markdown formatting.`
-
-    const result = await model.generateContent(prompt)
+    
+    if (!result) {
+      throw new Error(`Failed to generate content with any available model. Last error: ${lastError?.message || 'Unknown error'}`)
+    }
     const response = await result.response
     const text = response.text()
 
