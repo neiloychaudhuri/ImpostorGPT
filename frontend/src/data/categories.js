@@ -41,7 +41,7 @@ export const builtInCategories = [
       { word: 'Karl-Anthony Towns', hint: 'Initials' },
       { word: 'De\'Aaron Fox', hint: 'Animal' },
       { word: 'Shai Gilgeous-Alexander', hint: 'Initials' },
-      { word: 'Tyrese Haliburton', hint: 'Short' },
+      { word: 'Tyrese Haliburton', hint: 'Terrorist' },
     ]
   },
   {
