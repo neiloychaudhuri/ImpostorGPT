@@ -74,7 +74,9 @@ export function GameProvider({ children }) {
   const finishReveal = () => {
     // Set first player when all players have seen their roles
     if (firstPlayer === null && players.length > 0) {
-      setFirstPlayer(players[0])
+      // Randomly select a player to go first
+      const randomPlayerIndex = Math.floor(Math.random() * players.length)
+      setFirstPlayer(players[randomPlayerIndex])
     }
   }
 
